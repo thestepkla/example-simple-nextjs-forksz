@@ -11,17 +11,17 @@ async function deleteBookService(id:number) {
         })
 
         if (!bookExist) {
-            return [404, {success: false, message: 'Book not found'}]
+            return {status: 404, response: {success: false, message: 'Book not found'}}
         }
 
         const book = await prisma.book.delete({
             where: {id: id}
         })
 
-        return [200, {success: true, data: book}]
+        return {status: 200, response: {success: true, message: 'delete book success', data: book}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
 }

@@ -20,13 +20,13 @@ async function addBookService(req:any) {
         const {title, author, description, zone_id, type_id} = schema.parse(req)
     
         if (schema.safeParse(req).success === false) {
-            return [400, {success: false, message: schema.safeParse(req).error?.errors[0].message}]
+            return { status: 400, response: {success: false, message: schema.safeParse(req).error?.errors[0].message} };
         }
 
         // Check if the book already exists
         const hasBook = await prisma.book.findFirst({where: {title: title,author: author},select: {id: true}})
         if (hasBook) {
-            return [400, {success: false, message: 'Book already exists'}]
+            return { status: 400, response: {success: false, message: 'Book already exists'} };
         }
 
         const book = await prisma.book.create({
@@ -43,10 +43,10 @@ async function addBookService(req:any) {
             }
         })
 
-        return [200, {success: true, data: book}]
+        return { status: 200, response: {success: true, message: 'get book by id success', data: book} };
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return { status: 500, response: {success: false, message: 'Internal server error'} };
     }
     
 }

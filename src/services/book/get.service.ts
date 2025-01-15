@@ -12,13 +12,13 @@ async function getBookService(id:number) {
         })
 
         if (!book) {
-            return [404, {success: false, message: 'Book not found'}]
+            return {status: 404, response: {success: false, message: 'Book not found'}}
         }
 
-        return [200, {success: true, data: book}]
+        return {status: 200, response: {success: true, data: book}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
 }
@@ -32,10 +32,11 @@ async function getListBookService() {
             }
         })
 
-        return [200, {success: true, data: book}]
+        return {status: 200, response: {success: true, message:'get list book success', data: book}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+
+        return { status:500, response: {success: false, message: 'Internal server error'} };
     }
     
 }

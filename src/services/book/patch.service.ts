@@ -19,7 +19,7 @@ async function patchBookService(id:number, req:any) {
     
         if (schema.safeParse(req).success === false) {
             if (schema.safeParse(req).error?.errors[0].message === 'Title is required') {
-                return [400, {success: false, message: 'Title is required'}]
+                return { status: 400, response: {success: false, message: 'Title is required'} };
             }
         }
 
@@ -34,7 +34,7 @@ async function patchBookService(id:number, req:any) {
 
         // ตรวจสอบว่ามีข้อมูลที่จะอัพเดทหรือไม่
         if (Object.keys(payload).length === 0) {
-            return [400, {success: false, message: 'No data to update'}]
+            return { status: 400, response: {success: false, message: 'No data to update'} };
         }
 
         // check if the book exists
@@ -48,7 +48,7 @@ async function patchBookService(id:number, req:any) {
         })
 
         if (!bookExist) {
-            return [404, {success: false, message: 'Book not found'}]
+            return { status: 404, response: {success: false, message: 'Book not found'} };
         }
 
         // อัพเดทข้อมูล
@@ -61,13 +61,13 @@ async function patchBookService(id:number, req:any) {
             }
         })
 
-        return [200, {success: true, data: book}]
+        return { status: 200, response: {success: true, message: 'update book success', data: book} };
 
     }
 
     catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return { status: 500, response: {success: false, message: 'Internal server error'} };
     }
 
 }
