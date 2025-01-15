@@ -1,0 +1,34 @@
+import { PrismaClient } from "@prisma/client";
+
+import {z} from 'zod'
+
+const prisma = new PrismaClient()
+
+async function addZoneService(req:any) {
+    
+    try {
+        const schema = z.object({
+            name: z.string({message: 'Name is required'}).max(191, "name lenght is more 191 charater"),
+            description: z.string().max(191, "description lenght is more 191 charater").optional()
+        });
+    
+        const {name, description} = schema.parse(req);
+    
+        if (schema.safeParse(req).success === false) {
+            return [400, {success: false, message: schema.safeParse(req).error?.errors[0].message}];
+        }
+
+        const zone = await prisma.zone.create({
+            data: {
+                name: name,
+                description: description
+            }
+        });
+
+        return [200, {success: true, data: zone}];
+    } catch (error) {
+        console.log(error);
+        return [500, {success: false, message: 'Internal server error'}];
+    }
+    
+}
