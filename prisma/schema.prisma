@@ -25,7 +25,6 @@ model Zone {
 model BookType {
   id          BigInt @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
   name        String
-  description String?
   books       Book[] //one to many relationship
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
