@@ -1,0 +1,75 @@
+import { PrismaClient } from "@prisma/client";
+
+import {z} from 'zod'
+
+const prisma = new PrismaClient()
+
+async function patchBookService(id:number, req:any) {
+
+    try {
+        const schema = z.object({
+            title: z.string({message: 'Title is required'}).max(191, "title lenght is more 191 charater").optional(),
+            auth: z.string().max(191, "title lenght is more 191 charater").optional(),
+            description: z.string().max(191, "title lenght is more 191 charater").optional(),
+            zone_id: z.number({message: 'Zone is required (int)'}).optional(),
+            type_id: z.number({message: 'Type is required (int)'}).optional(),
+        })
+    
+        const {title, auth, description, zone_id, type_id} = schema.parse(req)
+    
+        if (schema.safeParse(req).success === false) {
+            if (schema.safeParse(req).error?.errors[0].message === 'Title is required') {
+                return [400, {success: false, message: 'Title is required'}]
+            }
+        }
+
+        const payload:any = {}
+
+        // Check if the request has the key, if yes, then add it to the payload
+        if (title !== undefined) payload['title'] = title
+        if (auth !== undefined) payload['author'] = auth
+        if (description !== undefined) payload['description'] = description
+        if (zone_id !== undefined) payload['zone'] = {connect: { id: zone_id }}
+        if (type_id !== undefined) payload['type'] = {connect: { id: type_id }}
+
+        // ตรวจสอบว่ามีข้อมูลที่จะอัพเดทหรือไม่
+        if (Object.keys(payload).length === 0) {
+            return [400, {success: false, message: 'No data to update'}]
+        }
+
+        // check if the book exists
+        const bookExist = await prisma.book.findFirst({
+            where: {
+                id: id
+            },
+            select: {
+                id: true
+            }
+        })
+
+        if (!bookExist) {
+            return [404, {success: false, message: 'Book not found'}]
+        }
+
+        // อัพเดทข้อมูล
+        const book = await prisma.book.update({
+            where: {
+                id: id
+            },
+            data: {
+                ...payload
+            }
+        })
+
+        return [200, {success: true, data: book}]
+
+    }
+
+    catch (error) {
+        console.log(error)
+        return [500, {success: false, message: 'Internal server error'}]
+    }
+
+}
+
+export default patchBookService
