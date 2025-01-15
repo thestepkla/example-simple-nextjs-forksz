@@ -7,16 +7,16 @@ async function patchTypeService(id:number, req:any) {
 
         // Check request body โดยไม่ใช้ zod
         if (!req.name) {
-            return [400, {success: false, message: 'name is required'}];
+            return {status: 400, response: {success: false, message: 'name is required'}};
         }
 
         //check type name is string
         if (typeof req.name !== 'string') {
-            return [400, {success: false, message: 'name must be a string'}];
+            return {status: 400, response: {success: false, message: 'name must be a string'}};
         }
 
         if (req.name.length > 191) {
-            return [400, {success: false, message: 'name is too long'}];
+            return {status: 400, response: {success: false, message: 'name length is more 191 charater'}};
         }
 
         // Check if the type exists
@@ -30,7 +30,7 @@ async function patchTypeService(id:number, req:any) {
         })
 
         if (!hasType) {
-            return [404, {success: false, message: 'Type not found'}]
+            return {status: 404, response: {success: false, message: 'Type not found'}}
         }
 
         const type = await prisma.bookType.update({
@@ -42,10 +42,10 @@ async function patchTypeService(id:number, req:any) {
             }
         })
 
-        return [200, {success: true, data: type}];
+        return {status: 200, response: {success: true, message: 'update type success', data: type}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
 }
 

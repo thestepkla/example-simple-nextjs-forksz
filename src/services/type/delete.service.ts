@@ -16,7 +16,7 @@ async function deleteTypeService(id:number) {
         })
 
         if (!hasType) {
-            return [404, {success: false, message: 'Type not found'}]
+            return {status: 404, response: {success: false, message: 'Type not found'}}
         }
 
         const type = await prisma.bookType.delete({
@@ -25,10 +25,12 @@ async function deleteTypeService(id:number) {
             }
         })
         
-        return [200, {success: true, data: type}]
+        return {status: 200, response: {success: true, message: 'delete type success', data: type}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
 }
+
+export default deleteTypeService

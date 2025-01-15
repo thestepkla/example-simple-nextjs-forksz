@@ -19,13 +19,13 @@ async function getTypeService(id:number) {
         })
 
         if (!type) {
-            return [404, {success: false, message: 'Type not found'}]
+            return {status: 404, response: {success: false, message: 'Type not found'}}
         }
 
-        return [200, {success: true, data: type}]
+        return {status: 200, response: {success: true, message: 'get book type success', data: type}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
 }
@@ -46,10 +46,10 @@ async function getListTypeService() {
             }
         })
 
-        return [200, {success: true, data: type}];
+        return {status: 200, response: {success: true, message:'get list type success', data: type}}
     } catch (error) {
         console.log(error);
-        return [500, {success: false, message: 'Internal server error'}];
+        return { status:500, response: {success: false, message: 'Internal server error'} };
     }
     
 }
