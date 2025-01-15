@@ -16,7 +16,7 @@ async function deleteZoneService(id:number) {
         })
 
         if (!hasZone) {
-            return [404, {success: false, message: 'Zone not found'}]
+            return {status: 404, response: {success: false, message: 'Zone not found'}}
         }
 
         const zone = await prisma.zone.delete({
@@ -25,10 +25,12 @@ async function deleteZoneService(id:number) {
             }
         })
         
-        return [200, {success: true, data: zone}]
+        return {status: 200, response: {success: true, message: 'delete zone success', data: zone}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
 }
+
+export default deleteZoneService

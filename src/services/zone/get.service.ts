@@ -12,13 +12,13 @@ async function getZoneService(id:number) {
         })
 
         if (!zone) {
-            return [404, {success: false, message: 'Zone not found'}]
+            return {status: 404, response: {success: false, message: 'Zone not found'}}
         }
 
-        return [200, {success: true, data: zone}]
+        return {status: 200, response: {success: true, message: 'get zone by id success', data: zone}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
 }
@@ -39,10 +39,10 @@ async function getListZoneService() {
             }
         })
 
-        return [200, {success: true, data: zone}]
+        return {status: 200, response: {success: true, message:'get list zone success', data: zone}}
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return { status:500, response: {success: false, message: 'Internal server error'} };
     }
     
 }

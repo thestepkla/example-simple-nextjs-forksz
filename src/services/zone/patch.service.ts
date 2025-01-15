@@ -16,7 +16,7 @@ async function patchZoneService(id:number, req:any) {
         const {name, description} = schema.parse(req)
 
         if (schema.safeParse(req).success === false) {
-            return [400, {success: false, message: schema.safeParse(req).error?.errors[0].message}]
+            return { status: 400, response: {success: false, message: schema.safeParse(req).error?.errors[0].message} }
         }
 
         const data:any = {}
@@ -24,7 +24,7 @@ async function patchZoneService(id:number, req:any) {
         if (description !== undefined) data['description'] = description
 
         if (Object.keys(data).length === 0) {
-            return [400, {success: false, message: 'No data to update'}]
+            return { status: 400, response: {success: false, message: 'No data to update'} }
         }
 
         const hasZone = await prisma.zone.findFirst({
@@ -37,7 +37,7 @@ async function patchZoneService(id:number, req:any) {
         })
 
         if (!hasZone) {
-            return [404, {success: false, message: 'Zone not found'}]
+            return { status: 404, response: {success: false, message: 'Zone not found'} }
         }
 
         const zone = await prisma.zone.update({
@@ -51,10 +51,12 @@ async function patchZoneService(id:number, req:any) {
             }
         })
         
-        return [200, {success: true, data: zone}]
+        return { status: 200, response: {success: true, message: 'update zone success', data: zone} }
     } catch (error) {
         console.log(error)
-        return [500, {success: false, message: 'Internal server error'}]
+        return { status: 500, response: {success: false, message: 'Internal server error'} }
     }
     
 }
+
+export default patchZoneService;
