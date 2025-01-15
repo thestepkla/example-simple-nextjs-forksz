@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // บอกว่าใช้ db ประเภทไหน (เจ้าไหน) "cockroachdb" | "mysql" | "postgresql" | "sqlite"
+  url      = env("DATABASE_URL") // ไม่ต้องเปลี่ยน
+}
+
+model Zone {
+  id          BigInt @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  name        String
+  description String?
+  books       Book[] //one to many relationship
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BookType {
+  id          BigInt @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  name        String
+  description String?
+  books       Book[] //one to many relationship
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+}
+
+model Book {
+  id          BigInt   @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  title       String
+  author      String
+  description String?
+  // 1 to many relationship
+  // 1 book belongs to 1 zone
+  bookCopy    BookCopy[] //one to many relationship
+  zoneId      BigInt
+  typeId      BigInt
+  zone        Zone     @relation(fields: [zoneId], references: [id]) // บอกว่า zoneId คือ foreign key ที่เชื่อมกับ Zone.id
+  type        BookType @relation(fields: [typeId], references: [id]) // บอกว่า zoneId คือ foreign key ที่เชื่อมกับ Zone.id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([title, author])
+}
+
+model BookCopy {
+  id          BigInt   @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  // 1 to many relationship
+  // 1 book belongs to 1 book title
+  bookId BigInt
+  book  Book @relation(fields: [bookId], references: [id]) // บอกว่า bookId คือ foreign key ที่เชื่อมกับ Book.id
+}
