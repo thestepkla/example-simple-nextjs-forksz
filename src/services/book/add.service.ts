@@ -29,6 +29,18 @@ async function addBookService(req:any) {
             return { status: 400, response: {success: false, message: 'Book already exists'} };
         }
 
+        //check has zone
+        const hasZone = await prisma.zone.findFirst({where: {id: zone_id},select: {id: true}})
+        if (!hasZone) {
+            return { status: 400, response: {success: false, message: 'Zone not found'} };
+        }
+
+        //check has type
+        const hasType = await prisma.bookType.findFirst({where: {id: type_id},select: {id: true}})
+        if (!hasType) {
+            return { status: 400, response: {success: false, message: 'Type not found'} };
+        }
+
         const book = await prisma.book.create({
             data: {
                 title: title,
