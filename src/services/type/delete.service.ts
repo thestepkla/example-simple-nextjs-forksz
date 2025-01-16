@@ -8,7 +8,7 @@ async function deleteTypeService(id:number) {
 
         const hasType = await prisma.bookType.findFirst({
             where: {
-                id: id
+                id: Number(id)
             },
             select: {
                 id: true
@@ -21,7 +21,7 @@ async function deleteTypeService(id:number) {
 
         const type = await prisma.bookType.delete({
             where: {
-                id: id
+                id: Number(id)
             }
         })
         

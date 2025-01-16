@@ -7,7 +7,7 @@ async function getTypeService(id:number) {
     try {
         const type = await prisma.bookType.findFirst({
             where: {
-                id: id
+                id: Number(id)
             },
             select: {
                 id: true,
