@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import {z} from 'zod'
+import moment from "moment-timezone";
 
 const prisma = new PrismaClient()
 
@@ -40,6 +41,9 @@ async function patchZoneService(id:number, req:any) {
             return { status: 404, response: {success: false, message: 'Zone not found'} }
         }
 
+        // ดึงเวลา จาก timezone ปัจจุบัน
+        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+
         const zone = await prisma.zone.update({
             where: {
                 id: id
@@ -47,7 +51,7 @@ async function patchZoneService(id:number, req:any) {
             data: {
                 name: name,
                 description: description,
-                updatedAt: new Date()
+                updatedAt: now
             }
         })
         
