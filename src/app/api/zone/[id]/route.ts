@@ -29,7 +29,7 @@ export async function DELETE(request: NextRequest, {params}: {params: Promise<{i
     }
 }
 
-export async function PATCH(request: NextRequest, {params}: {params: Promise<{id: number}>}) {
+export async function PATCH(request: NextRequest, {params}: {params: {id: number}}) {
     try{
         const { id } = await params
         const body = await request.json()
