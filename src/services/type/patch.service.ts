@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
+import moment from "moment-timezone";
+
+
 const prisma = new PrismaClient()
 
 async function patchTypeService(id:number, req:any) {
@@ -33,12 +36,16 @@ async function patchTypeService(id:number, req:any) {
             return {status: 404, response: {success: false, message: 'Type not found'}}
         }
 
+        // ดึงเวลา จาก timezone ปัจจุบัน
+        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+
         const type = await prisma.bookType.update({
             where: {
                 id: id
             },
             data: {
-                name: req.name
+                name: req.name,
+                updatedAt: now
             }
         })
 
