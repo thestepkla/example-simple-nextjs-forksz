@@ -8,7 +8,7 @@ async function deleteZoneService(id:number) {
 
         const hasZone = await prisma.zone.findFirst({
             where: {
-                id: id
+                id: Number(id)
             },
             select: {
                 id: true
@@ -21,7 +21,7 @@ async function deleteZoneService(id:number) {
 
         const zone = await prisma.zone.delete({
             where: {
-                id: id
+                id: Number(id)
             }
         })
         

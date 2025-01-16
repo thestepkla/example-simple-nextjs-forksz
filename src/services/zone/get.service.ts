@@ -7,7 +7,15 @@ async function getZoneService(id:number) {
     try {
         const zone = await prisma.zone.findFirst({
             where: {
-                id: id
+                id: Number(id)
+            },
+            select: {
+                id: true,
+                name: true,
+                books: true,
+                description: true,
+                createdAt: true,
+                updatedAt: true
             }
         })
 
@@ -17,7 +25,9 @@ async function getZoneService(id:number) {
 
         return {status: 200, response: {success: true, message: 'get zone by id success', data: zone}}
     } catch (error) {
-        console.log(error)
+        if (error instanceof Error) {
+            console.log(error.stack)
+        }
         return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     
@@ -41,7 +51,9 @@ async function getListZoneService() {
 
         return {status: 200, response: {success: true, message:'get list zone success', data: zone}}
     } catch (error) {
-        console.log(error)
+        if (error instanceof Error) {
+            console.log(error.stack)
+        }
         return { status:500, response: {success: false, message: 'Internal server error'} };
     }
     
