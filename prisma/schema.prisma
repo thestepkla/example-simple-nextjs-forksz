@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Zone {
-  id          BigInt @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  id          Int @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
   name        String
   description String?
   books       Book[] //one to many relationship
@@ -23,7 +23,7 @@ model Zone {
 }
 
 model BookType {
-  id          BigInt @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  id          Int @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
   name        String
   books       Book[] //one to many relationship
   createdAt   DateTime @default(now()) // บอกว่าเวลาสร้างข้อมูลคือเวลาปัจจุบัน (ซึ่ง now() จะยึดตาม defualt timezone ของ hosting)
@@ -32,13 +32,13 @@ model BookType {
 }
 
 model Book {
-  id          BigInt   @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  id          Int   @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
   title       String
   author      String
   description String?
   bookCopy    BookCopy[] //one to many relationship
-  zoneId      BigInt
-  typeId      BigInt
+  zoneId      Int
+  typeId      Int
   zone        Zone     @relation(fields: [zoneId], references: [id]) // บอกว่า zoneId คือ foreign key ที่เชื่อมกับ Zone.id
   type        BookType @relation(fields: [typeId], references: [id]) // บอกว่า zoneId คือ foreign key ที่เชื่อมกับ Zone.id
   createdAt   DateTime @default(now()) // บอกว่าเวลาสร้างข้อมูลคือเวลาปัจจุบัน (ซึ่ง now() จะยึดตาม defualt timezone ของ hosting)
@@ -48,11 +48,11 @@ model Book {
 }
 
 model BookCopy {
-  id          BigInt   @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
+  id          Int   @id @default(autoincrement()) // บอกว่า id คือ primary key และ auto increment
   
   createdAt   DateTime @default(now()) // บอกว่าเวลาสร้างข้อมูลคือเวลาปัจจุบัน (ซึ่ง now() จะยึดตาม defualt timezone ของ hosting)
   updatedAt   DateTime @updatedAt
   // 1 book copy to 1 book 
-  bookId BigInt
+  bookId Int
   book  Book @relation(fields: [bookId], references: [id]) // บอกว่า bookId คือ foreign key ที่เชื่อมกับ Book.id
 }
