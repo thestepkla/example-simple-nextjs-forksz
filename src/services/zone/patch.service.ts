@@ -10,8 +10,8 @@ async function patchZoneService(id:number, req:any) {
     try {
 
         const schema = z.object({
-            name: z.string().max(191, "name lenght is more 191 charater").optional(),
-            description: z.string().max(191, "description lenght is more 191 charater").optional()
+            name: z.string().max(191, "name length is more 191 charater").optional(),
+            description: z.string().max(191, "description length is more 191 charater").optional()
         })
 
         if (schema.safeParse(req).success === false) {
@@ -30,7 +30,7 @@ async function patchZoneService(id:number, req:any) {
 
         const hasZone = await prisma.zone.findFirst({
             where: {
-                id: id
+                id: Number(id)
             },
             select: {
                 id: true
@@ -42,11 +42,11 @@ async function patchZoneService(id:number, req:any) {
         }
 
         // ดึงเวลา จาก timezone ปัจจุบัน
-        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+        const now = moment().tz('Asia/Bangkok').format();
 
         const zone = await prisma.zone.update({
             where: {
-                id: id
+                id: Number(id)
             },
             data: {
                 name: name,
@@ -57,7 +57,9 @@ async function patchZoneService(id:number, req:any) {
         
         return { status: 200, response: {success: true, message: 'update zone success', data: zone} }
     } catch (error) {
-        console.log(error)
+        if (error instanceof Error) {
+            console.log(error.stack)
+        }
         return { status: 500, response: {success: false, message: 'Internal server error'} }
     }
     
