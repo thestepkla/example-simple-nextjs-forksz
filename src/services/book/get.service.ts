@@ -17,7 +17,9 @@ async function getBookService(id:number) {
 
         return {status: 200, response: {success: true, data: book}}
     } catch (error) {
-        console.log(error)
+        if (error instanceof Error) {
+            console.log(error)
+        }
         return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
     

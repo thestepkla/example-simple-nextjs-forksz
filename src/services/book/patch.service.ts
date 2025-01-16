@@ -22,7 +22,7 @@ async function patchBookService(id:number, req:any) {
                 return { status: 400, response: {success: false, message: 'Title is required'} };
             }
         }
-        
+
         const {title, auth, description, zone_id, type_id} = schema.parse(req)
 
         const payload:any = {}
@@ -88,7 +88,9 @@ async function patchBookService(id:number, req:any) {
     }
 
     catch (error) {
-        console.log(error)
+        if (error instanceof Error) {
+            console.log(error.stack)
+        }
         return { status: 500, response: {success: false, message: 'Internal server error'} };
     }
 
