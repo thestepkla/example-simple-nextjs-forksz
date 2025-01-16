@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+import moment from "moment-timezone";
+
 import {z} from 'zod'
 
 const prisma = new PrismaClient()
@@ -17,9 +19,13 @@ async function addTypeService(req:any) {
             return {status: 400, response: {success: false, message: schema.safeParse(req).error?.errors[0].message}};
         }
 
+        // ดึงเวลา จาก timezone ปัจจุบัน
+        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+
         const type = await prisma.bookType.create({
             data: {
-                name: name
+                name: name,
+               createdAt: now, 
             }
         });
 
