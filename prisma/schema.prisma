@@ -46,7 +46,7 @@ model Book {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([title, author])
+  @@unique([title, author]) // บอกว่า title และ author ต้องไม่ซ้ำกัน
 }
 
 model BookCopy {
