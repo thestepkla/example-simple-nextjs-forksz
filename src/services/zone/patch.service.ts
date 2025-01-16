@@ -14,11 +14,11 @@ async function patchZoneService(id:number, req:any) {
             description: z.string().max(191, "description lenght is more 191 charater").optional()
         })
 
-        const {name, description} = schema.parse(req)
-
         if (schema.safeParse(req).success === false) {
             return { status: 400, response: {success: false, message: schema.safeParse(req).error?.errors[0].message} }
         }
+
+        const {name, description} = schema.parse(req)
 
         const data:any = {}
         if (name !== undefined) data['name'] = name

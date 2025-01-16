@@ -17,13 +17,13 @@ async function patchBookService(id:number, req:any) {
             type_id: z.number({message: 'Type is required (int)'}).optional(),
         })
     
-        const {title, auth, description, zone_id, type_id} = schema.parse(req)
-    
         if (schema.safeParse(req).success === false) {
             if (schema.safeParse(req).error?.errors[0].message === 'Title is required') {
                 return { status: 400, response: {success: false, message: 'Title is required'} };
             }
         }
+        
+        const {title, auth, description, zone_id, type_id} = schema.parse(req)
 
         const payload:any = {}
 

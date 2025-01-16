@@ -13,11 +13,11 @@ async function addTypeService(req:any) {
             name: z.string({message: 'Name is required'}).max(191, "name lenght is more 191 charater"),
         });
     
-        const {name} = schema.parse(req);
-    
         if (schema.safeParse(req).success === false) {
             return {status: 400, response: {success: false, message: schema.safeParse(req).error?.errors[0].message}};
         }
+
+        const {name} = schema.parse(req);
 
         // ดึงเวลา จาก timezone ปัจจุบัน
         const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
