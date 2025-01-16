@@ -5,7 +5,7 @@ import deleteZoneService from "@/services/zone/delete.service";
 import patchZoneService from "@/services/zone/patch.service";
 
 
-export async function GET({params}: {params: Promise<{id: number}>}) {
+export async function GET(request: NextRequest, {params}: {params: Promise<{id: number}>}) {
     try {
         const { id } = await params
         const {status,response} = await getZoneService(id)
@@ -17,7 +17,7 @@ export async function GET({params}: {params: Promise<{id: number}>}) {
     }
 }
 
-export async function DELETE({params}: {params: Promise<{id: number}>}) {
+export async function DELETE(request: NextRequest, {params}: {params: Promise<{id: number}>}) {
     try {
         const { id } = await params
         const {status, response} = await deleteZoneService(id)
