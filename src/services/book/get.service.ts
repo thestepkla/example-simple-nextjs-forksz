@@ -7,7 +7,7 @@ async function getBookService(id:number) {
     try {
         const book = await prisma.book.findFirst({
             where: {
-                id: id
+                id: Number(id)
             }
         })
 

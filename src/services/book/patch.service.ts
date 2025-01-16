@@ -41,7 +41,7 @@ async function patchBookService(id:number, req:any) {
 
         // check has zone
         if (zone_id !== undefined) {
-            const hasZone = await prisma.zone.findFirst({where: {id: zone_id},select: {id: true}})
+            const hasZone = await prisma.zone.findFirst({where: {id: Number(zone_id)},select: {id: true}})
             if (!hasZone) {
                 return { status: 400, response: {success: false, message: 'Zone not found'} };
             }
@@ -49,7 +49,7 @@ async function patchBookService(id:number, req:any) {
 
         // check has type
         if (type_id !== undefined) {
-            const hasType = await prisma.bookType.findFirst({where: {id: type_id},select: {id: true}})
+            const hasType = await prisma.bookType.findFirst({where: {id: Number(type_id)},select: {id: true}})
             if (!hasType) {
                 return { status: 400, response: {success: false, message: 'Type not found'} };
             }
@@ -58,7 +58,7 @@ async function patchBookService(id:number, req:any) {
         // check if the book exists
         const bookExist = await prisma.book.findFirst({
             where: {
-                id: id
+                id: Number(id)
             },
             select: {
                 id: true
@@ -70,12 +70,12 @@ async function patchBookService(id:number, req:any) {
         }
 
         // ดึงเวลาปัจจุบัน ของ timezone Asia/Bangkok
-        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+        const now = moment().tz('Asia/Bangkok').format()
 
         // อัพเดทข้อมูล
         const book = await prisma.book.update({
             where: {
-                id: id
+                id: Number(id)
             },
             data: {
                 ...payload,

@@ -7,7 +7,7 @@ async function deleteBookService(id:number) {
     try {
         //check book exist
         const bookExist = await prisma.book.findFirst({
-            where: {id: id},select: {id: true}
+            where: {id: Number(id)},select: {id: true}
         })
 
         if (!bookExist) {
@@ -15,7 +15,7 @@ async function deleteBookService(id:number) {
         }
 
         const book = await prisma.book.delete({
-            where: {id: id}
+            where: {id: Number(id)}
         })
 
         return {status: 200, response: {success: true, message: 'delete book success', data: book}}
