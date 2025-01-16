@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+import moment from "moment-timezone";
+
 import {z} from 'zod'
 
 const prisma = new PrismaClient()
@@ -37,6 +39,22 @@ async function patchBookService(id:number, req:any) {
             return { status: 400, response: {success: false, message: 'No data to update'} };
         }
 
+        // check has zone
+        if (zone_id !== undefined) {
+            const hasZone = await prisma.zone.findFirst({where: {id: zone_id},select: {id: true}})
+            if (!hasZone) {
+                return { status: 400, response: {success: false, message: 'Zone not found'} };
+            }
+        }
+
+        // check has type
+        if (type_id !== undefined) {
+            const hasType = await prisma.bookType.findFirst({where: {id: type_id},select: {id: true}})
+            if (!hasType) {
+                return { status: 400, response: {success: false, message: 'Type not found'} };
+            }
+        }
+
         // check if the book exists
         const bookExist = await prisma.book.findFirst({
             where: {
@@ -51,13 +69,17 @@ async function patchBookService(id:number, req:any) {
             return { status: 404, response: {success: false, message: 'Book not found'} };
         }
 
+        // ดึงเวลาปัจจุบัน ของ timezone Asia/Bangkok
+        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss')
+
         // อัพเดทข้อมูล
         const book = await prisma.book.update({
             where: {
                 id: id
             },
             data: {
-                ...payload
+                ...payload,
+                updatedAt: now,
             }
         })
 
