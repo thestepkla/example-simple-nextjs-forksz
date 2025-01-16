@@ -10,8 +10,8 @@ async function addZoneService(req:any) {
     
     try {
         const schema = z.object({
-            name: z.string({message: 'Name is required'}).max(191, "name lenght is more 191 charater"),
-            description: z.string().max(191, "description lenght is more 191 charater").optional()
+            name: z.string({message: 'Name is required'}).max(191, "name length is more 191 charater"),
+            description: z.string().max(191, "description length is more 191 charater").optional()
         });
     
         if (schema.safeParse(req).success === false) {
@@ -21,7 +21,7 @@ async function addZoneService(req:any) {
         const {name, description} = schema.parse(req);
 
         // ดึงเวลา จาก timezone ปัจจุบัน
-        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+        const now = moment().tz('Asia/Bangkok').format();
 
         const zone = await prisma.zone.create({
             data: {
