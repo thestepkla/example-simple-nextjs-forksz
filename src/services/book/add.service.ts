@@ -18,11 +18,12 @@ async function addBookService(req:any) {
             type_id: z.number({message: 'Type is required (int)'}),
         })
     
-        const {title, author, description, zone_id, type_id} = schema.parse(req)
     
         if (schema.safeParse(req).success === false) {
             return { status: 400, response: {success: false, message: schema.safeParse(req).error?.errors[0].message} };
         }
+
+        const {title, author, description, zone_id, type_id} = schema.parse(req)
 
         // Check if the book already exists
         const hasBook = await prisma.book.findFirst({where: {title: title,author: author},select: {id: true}})
