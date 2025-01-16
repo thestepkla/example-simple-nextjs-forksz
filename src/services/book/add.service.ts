@@ -11,9 +11,9 @@ async function addBookService(req:any) {
 
     try {
         const schema = z.object({
-            title: z.string({message: 'Title is required'}).max(191, "title lenght is more 191 charater"),
-            author: z.string().max(191, "title lenght is more 191 charater"),
-            description: z.string().max(191, "title lenght is more 191 charater").optional(),
+            title: z.string({message: 'Title is required'}).max(191, "title length is more 191 charater"),
+            author: z.string().max(191, "title length is more 191 charater"),
+            description: z.string().max(191, "title length is more 191 charater").optional(),
             zone_id: z.number({message: 'Zone is required (int)'}),
             type_id: z.number({message: 'Type is required (int)'}),
         })
@@ -44,7 +44,7 @@ async function addBookService(req:any) {
         }
 
         // ดึงเวลา จาก timezone ปัจจุบัน
-        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+        const now = moment().tz('Asia/Bangkok').format();
 
         const book = await prisma.book.create({
             data: {
@@ -61,9 +61,17 @@ async function addBookService(req:any) {
             }
         })
 
-        return { status: 200, response: {success: true, message: 'get book by id success', data: book} };
+        //fix bigint to number
+        const bookData = {
+            ...book,
+            id: Number.parseInt(book.id.toString())
+        }
+
+        return { status: 200, response: {success: true, message: 'get book by id success', data: bookData} };
     } catch (error) {
-        console.log(error)
+        if (error instanceof Error){
+            console.log("Error: ", error.stack)
+        }
         return { status: 500, response: {success: false, message: 'Internal server error'} };
     }
     
