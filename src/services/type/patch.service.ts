@@ -25,7 +25,7 @@ async function patchTypeService(id:number, req:any) {
         // Check if the type exists
         const hasType = await prisma.bookType.findFirst({
             where: {
-                id: id
+                id: Number(id)
             },
             select: {
                 id: true
@@ -37,11 +37,11 @@ async function patchTypeService(id:number, req:any) {
         }
 
         // ดึงเวลา จาก timezone ปัจจุบัน
-        const now = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+        const now = moment().tz('Asia/Bangkok').format();
 
         const type = await prisma.bookType.update({
             where: {
-                id: id
+                id: Number(id)
             },
             data: {
                 name: req.name,
@@ -51,7 +51,9 @@ async function patchTypeService(id:number, req:any) {
 
         return {status: 200, response: {success: true, message: 'update type success', data: type}}
     } catch (error) {
-        console.log(error)
+        if (error instanceof Error) {
+            console.log("Error: ", error.stack)
+        }
         return {status: 500, response: {success: false, message: 'Internal server error'}}
     }
 }
