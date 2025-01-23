@@ -4,7 +4,7 @@ import { getBookService } from '@/services/book/get.service'
 import deleteBookService from '@/services/book/delete.service'
 import patchBookService from '@/services/book/patch.service'
 
-export async function GET(request: NextRequest, {params}: {params: {id: number}}) {
+export async function GET(request: NextRequest, {params}: {params: Promise<{id: number}>}) {
     try {
         const { id } = await params
         const {status,response} = await getBookService(id)
